@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
     useEffect(() => {
         if (videoRef && videoRef.current) {
             videoRef.current.srcObject = stream;
+            console.log(name);
         }
       }, [videoRef,stream])
     

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const Video = ({stream}) => {
+export const Video = ({stream}) => {
     const videoRef = useRef();
     useEffect(() => {
         if (videoRef && videoRef.current) {
@@ -16,4 +16,3 @@ const Video = ({stream}) => {
         </div>
       )
 }
-export default Video;

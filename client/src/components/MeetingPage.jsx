@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import socketIO from 'socket.io-client';
 import { Button, Grid, Typography } from "@mui/material"
-import  CentralizedCard  from "./CentralizedCard";
-import Video  from "./Video";
+import { CentralizedCard } from "./CentralizedCard";
+import { Video } from "./Video";
 
  let pc = new RTCPeerConnection({
    iceServers: [
@@ -16,7 +16,7 @@ import Video  from "./Video";
  
 export function MeetingPage() {
     const [socket, setSocket] = useState(null);
-    const [meetingJoined, setMeetingJoined] = useState(false);
+    const [joined, setJoined] = useState(false);
     const [videoStream, setVideoStream] = useState();
     const [remoteVideoStream, setRemoteVideoStream] = useState();
     
@@ -41,7 +41,7 @@ export function MeetingPage() {
           });
 
         s.on("localDescription", async ({ description }) => {
-          // Receiving video -
+         
           console.log({ description });
           pc.setRemoteDescription(description);
           pc.ontrack = (e) => {
@@ -59,7 +59,7 @@ export function MeetingPage() {
           s.emit("remoteDescription", { description: pc.localDescription });
         });
           s.on("remoteDescription", async ({ description }) => {
-            // Receiving video -
+           
             console.log({ description });
             pc.setRemoteDescription(description);
             pc.ontrack = (e) => {
@@ -75,7 +75,7 @@ export function MeetingPage() {
             };
 
          
-            //s.emit("remoteDescription", { description: pc.localDescription });
+            
           });
       });
     }, []);
@@ -86,7 +86,7 @@ export function MeetingPage() {
         </div>
     }
 
-    if (!meetingJoined) {
+    if (!joined) {
         return <div style={{minHeight: "100vh",}}>
             <CentralizedCard>
                 <div>
@@ -97,7 +97,7 @@ export function MeetingPage() {
                 <br/><br/>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <Button onClick={async () => {
-                        // sending pc
+                       
                         pc.onicecandidate = ({candidate}) => {
                             socket.emit("iceCandidate", {candidate});
                         }
@@ -112,13 +112,8 @@ export function MeetingPage() {
                             }
                     
             
-                        // socket.on("remoteDescription", async ({description}) => {
-                        //     await pc.setRemoteDescription(description);  
-                        // });
-                        // socket.on("iceCandidateReply", ({candidate}) => {
-                        //     pc.addIceCandidate(candidate)
-                        // });
-                        setMeetingJoined(true);
+                        
+                        setJoined(true);
                     }} disabled={!socket} variant="contained">
                         Join meeting
                     </Button>
@@ -136,4 +131,3 @@ export function MeetingPage() {
         </Grid>
     </Grid>
 }
-export default MeetingPage;

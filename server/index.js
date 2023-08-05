@@ -77,18 +77,6 @@ io.on('connection', (socket) => {
   });
 
 
-  socket.on("iceCandidateReply", (params) => {
-    let roomId = users[socket.id].roomId;    
-    let otherUsers = rooms[roomId].users;
-
-    otherUsers.forEach(otherUser => {
-      if (otherUser !== socket.id) {
-        io.to(otherUser).emit("iceCandidateReply", {
-          candidate: params.candidate
-        })
-      }
-    })
-  });
 
 });
 

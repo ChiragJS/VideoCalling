@@ -1,6 +1,7 @@
 
 export function LandingPage() {
-    return <div>
-        Hi welcome to landing page
+    return <div >
+WElcome to landing page
+
     </div>
 }

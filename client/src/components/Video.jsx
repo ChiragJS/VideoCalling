@@ -11,7 +11,7 @@ export const Video = ({stream}) => {
       return (
         <div>
           <div>
-            <video style={{borderRadius: 10}} ref={videoRef}  width="100%" autoPlay={true} playsInline={true} />
+            <video style={{borderRadius: 10,paddingBottom:"5px",width:"100%",height:"50%"}} ref={videoRef} autoPlay={true} playsInline={true} />
           </div>
         </div>
       )

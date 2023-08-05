@@ -4,7 +4,10 @@ import socketIO from 'socket.io-client';
 import { Button, Grid, Typography } from "@mui/material"
 import { CentralizedCard } from "./CentralizedCard";
 import { Video } from "./Video";
-
+import zIndex from "@mui/material/styles/zIndex";
+import CustomWrapper from "./CustomWrapper";
+import "../styles.css";
+import CallEndIcon from "@mui/icons-material/CallEnd"
  let pc = new RTCPeerConnection({
    iceServers: [
      {
@@ -52,9 +55,7 @@ export function MeetingPage() {
             pc.addIceCandidate(candidate);
           });
 
-          pc.onicecandidate = ({ candidate }) => {
-            s.emit("iceCandidateReply", { candidate });
-          };
+      
           await pc.setLocalDescription(await pc.createAnswer());
           s.emit("remoteDescription", { description: pc.localDescription });
         });
@@ -70,9 +71,6 @@ export function MeetingPage() {
               pc.addIceCandidate(candidate);
             });
 
-            pc.onicecandidate = ({ candidate }) => {
-              s.emit("iceCandidateReply", { candidate });
-            };
 
          
             
@@ -122,12 +120,31 @@ export function MeetingPage() {
         </div>
     }
     console.log({remoteVideoStream,videoStream})
-    return <Grid container spacing={2} alignContent={"center"} justifyContent={"center"}>
-        <Grid item xs={12} md={6} lg={4}>
-            <Video stream={videoStream} />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-            <Video stream={remoteVideoStream} />
-        </Grid>
+    return <Grid container spacing={2} className="video-stream" alignContent={"center"} justifyContent={"center"}>
+    {/* <Grid item xs={4} md={4} lg={4} >
+      
+      <Video stream={videoStream} className="video-stream" />
+    </Grid> */}
+    <Grid item xs={8} md={8} lg={8} style={{ position: "relative" }}>
+      {/* Your custom Video component */}
+      <Video stream={remoteVideoStream} className="video-stream" />
+      <div className="preview-video">
+        {/* Your custom Video component */}
+        <Video stream={videoStream} className="video-stream video-stream-preview" />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "5%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1,
+        }}
+      >
+        <Button variant="contained" size="large" color="error" startIcon={<CallEndIcon />} sx={{paddingLeft:"30px",borderRadius:100}}>
+        </Button>
+      </div>
     </Grid>
+  </Grid>
+
 }

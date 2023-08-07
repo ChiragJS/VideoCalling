@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import socketIO from 'socket.io-client';
-import { Button, Grid, Typography } from "@mui/material"
+import { Button, Grid, Typography,CircularProgress } from "@mui/material"
 import { CentralizedCard } from "./CentralizedCard";
 import { Video } from "./Video";
 import zIndex from "@mui/material/styles/zIndex";
 import CustomWrapper from "./CustomWrapper";
 import "../styles.css";
+import { useNavigate } from "react-router-dom";
 import CallEndIcon from "@mui/icons-material/CallEnd"
  let pc = new RTCPeerConnection({
    iceServers: [
@@ -22,9 +23,9 @@ export function MeetingPage() {
     const [joined, setJoined] = useState(false);
     const [videoStream, setVideoStream] = useState();
     const [remoteVideoStream, setRemoteVideoStream] = useState();
-    
     const params = useParams();
     const roomId = params.roomId;
+    const navigate = useNavigate();
 
     useEffect(() => {
       const s = socketIO.connect("http://localhost:3000");
@@ -79,8 +80,10 @@ export function MeetingPage() {
     }, []);
 
     if (!videoStream) {
-        return <div>
-            Loading...
+        return <div style={{height:"100vh",display:'flex',flexFlow:'column',justifyContent:'center'}}>
+          <div style={{display:'flex',flexFlow:'row',justifyContent:'center'}}>
+            <CircularProgress></CircularProgress>
+            </div>
         </div>
     }
 
@@ -141,8 +144,24 @@ export function MeetingPage() {
           zIndex: 1,
         }}
       >
-        <Button variant="contained" size="large" color="error" startIcon={<CallEndIcon />} sx={{paddingLeft:"30px",borderRadius:100}}>
-        </Button>
+        {remoteVideoStream && (<Button variant="contained" size="large" color="error" startIcon={<CallEndIcon />} sx={{paddingLeft:"30px",borderRadius:100}} onClick={()=>{
+          pc.close();
+          socket.emit("end",{ x :"abc"})
+          socket.disconnect();
+          setJoined(false);
+          videoStream.getTracks().forEach((track)=>{
+            console.log("from get Video TRacks")
+            track.stop();
+          })
+          remoteVideoStream.getTracks().forEach((track)=>{
+            console.log("from get Video TRacks")
+            track.stop();
+          })
+          setVideoStream(null);
+          setRemoteVideoStream(null);
+          navigate("/")
+        }} >
+        </Button>)}
       </div>
     </Grid>
   </Grid>

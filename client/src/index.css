@@ -3,5 +3,8 @@ body{
     padding: 0;
     max-height: 100vh;
     overflow: hidden;
-    background-image: linear-gradient(to right,#D4145A,#FBB03B);
+    /* background-image: linear-gradient(to right,#D4145A,#FBB03B); */
+    background: url('./assets/photo-1493305457700-d3d24daf8c8c.jpg') no-repeat center center fixed;
+    
+    background-size: cover;
 }

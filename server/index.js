@@ -15,11 +15,14 @@ const users = {};
 io.on('connection', (socket) => {
   console.log('a user connected ' + socket.id);
 
-  socket.on("disconnect", (params) => {
+  socket.on("end", (params) => {
+    console.log('Disconnected '+socket.id);
+    console.log(rooms);
     Object.keys(rooms).map(roomId => {
       rooms[roomId].users = rooms[roomId].users.filter(x => x !== socket.id)
     })
     delete users[socket.id];
+    
   })
 
   socket.on("join", (params) => {
@@ -81,5 +84,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(3000, () => {
-  console.log('listening on *:3001');
+  console.log('listening on *:3000');
 });

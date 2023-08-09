@@ -1,8 +1,11 @@
 import { useState } from "react";
 import {Button,Card,Typography,TextField} from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 function SignUp(){
     const [userEmail,setUserEmail] = useState("");
     const [password,setPassword] = useState("");
+    const navigate = useNavigate();
  return <div style={{paddingTop:150}}>
         <center>
         <Typography variant = "h4">SignUp</Typography>
@@ -23,7 +26,20 @@ function SignUp(){
             }}/>
         <br />
         <div style={{display:'flex', justifyContent:"center"}}>
-        <Button className="LoginButton" variant="contained" size="medium" color="success" style={{borderRadius:20,width:"30%"}}>SignUp</Button>
+        <Button className="LoginButton" variant="contained" size="medium" color="success" onClick={async()=>{
+            const response = await axios.post('http://localhost:3001/signup',{},{
+                headers:{
+                    email : userEmail,
+                    password: password
+                }
+            });
+            if (response.data.user){
+                navigate("/meeting/123")
+            }
+            else{
+                console.log("Invalid userId");
+            }
+        }} style={{borderRadius:20,width:"30%"}}>SignUp</Button>
         </div>
         </Card>
         </center>

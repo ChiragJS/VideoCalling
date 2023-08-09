@@ -91,9 +91,7 @@ export function MeetingPage() {
         return <div style={{minHeight: "100vh",}}>
             <CentralizedCard>
                 <div>
-                    <Typography textAlign={"center"} variant="h5">
-                        Hi welcome to meeting {roomId}.
-                    </Typography>
+                    <Video stream={videoStream} />
                 </div>
                 <br/><br/>
                 <div style={{display: "flex", justifyContent: "center"}}>
